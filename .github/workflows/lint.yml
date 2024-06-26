@@ -1,0 +1,22 @@
+name: Run ESLint on Pull Requests
+
+on: pull_request
+
+jobs:
+  linting:
+    name: Run ESLint
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Install NodeJS
+        uses: actions/setup-node@v4
+      - name: Code Checkout
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+          ref: ${{ github.event.pull_request.head.ref }}
+          fetch-depth: 2
+      - name: Install dependencies
+        run: npm install
+      - name: Run ESLint
+        run: npm run lint
