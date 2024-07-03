@@ -13,6 +13,8 @@
   },
   "devDependencies": {
     "@nuxt/eslint": "^0.3.13",
+    "@nuxtjs/tailwindcss": "^6.12.0",
+    "daisyui": "^4.12.10",
     "eslint": "^8.57.0"
   },
   "dependencies": {
