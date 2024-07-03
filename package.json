@@ -13,17 +13,12 @@
   },
   "devDependencies": {
     "@nuxt/eslint": "^0.3.13",
-    "eslint": "^9.5.0"
+    "eslint": "^8.57.0"
   },
   "dependencies": {
     "@pinia/nuxt": "^0.5.1",
     "nuxt": "^3.12.2",
     "pinia": "^2.1.7"
-  },
-  "eslintConfig": {
-    "extends": [
-      "@nuxtjs/eslint-config-typescript"
-    ]
   },
   "overrides": {
     "vue": "latest"
