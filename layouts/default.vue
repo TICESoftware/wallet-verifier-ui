@@ -2,7 +2,10 @@
 
 <template>
   <div data-theme="wallettheme">
-      <slot />
+    <div class="lg:pt-10 pb-3 bg-primary">
+      <Header/>
+    </div>
+    <slot/>
   </div>
 </template>
 
