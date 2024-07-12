@@ -1,4 +1,5 @@
 import daisyui from "daisyui"
+
 module.exports = {
     plugins: [
         daisyui,
@@ -7,11 +8,13 @@ module.exports = {
         themes: [
             {
                 wallettheme: {
-                    "primary": "#a991f7",
-                    "secondary": "#a991f7",
-                    "accent": "#a991f7",
-                    "neutral": "#a991f7",
-                    "base-100": "#F2F7FC",
+                    "primary": "#005CC8",        // Buttons
+                    "primary-content": "#FFFFFF", // Text on Dark
+                    "secondary": "#00479A",      // Transparent Buttons
+                    "accent": "#0D2C54",         // Headers
+                    "neutral": "#D7D7D7",        // Outlines
+                    "base-100": "#F2F7FC",       // Light blue Background
+                    "base-content": "#000000",   // Text
                 },
             },
         ],
