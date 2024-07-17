@@ -26,7 +26,7 @@
               ]"
                 :to="link.to"
             >
-              <span @click="close" class="truncate px-4 py-2 block">{{
+              <span class="truncate px-4 py-2 block" @click="close">{{
                   link.name
                 }}</span>
             </NuxtLink>
