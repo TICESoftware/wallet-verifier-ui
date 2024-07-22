@@ -2,7 +2,7 @@
 
 export default defineNuxtConfig({
   ssr: false,
-  modules: ['@nuxt/eslint', '@pinia/nuxt', '@nuxtjs/tailwindcss', "@nuxt/image"],
+  modules: ['@nuxt/eslint', '@pinia/nuxt', '@nuxtjs/tailwindcss'],
   devtools: { enabled: true },
   runtimeConfig: {
     public: {
