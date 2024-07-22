@@ -1,6 +1,6 @@
 <template>
 <div>
-  <PresentationInfo/>
+  <PresentationForm/>
 </div>
 </template>
 <script setup lang="ts">

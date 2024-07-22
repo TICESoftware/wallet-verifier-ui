@@ -26,7 +26,7 @@
 
 <script setup lang="ts">
 import NavLinksMobile from "~/components/NavLinksMobile.vue";
-import type {NavLinks} from "~/types/NavLinks";
+import type {NavLinks} from "~/models/NavLinks";
 
 const links: NavLinks[] =
     [
