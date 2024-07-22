@@ -29,46 +29,54 @@
 <script setup lang="ts">
 import axios from 'axios';
 import type {PresentationRequest} from "~/models/PresentationRequest.ts";
-import { presentationInfo } from '~/models/PresentationInfo';
+import {presentationInfo} from '~/models/PresentationInfo';
+import type {PresentationResponse} from "~/models/PresentationResponse";
 
 
 const runtimeConfig = useRuntimeConfig()
 const baseUrl = runtimeConfig.public.apiUrl
-type dataList = {kind: string; selected: boolean}
-const dataList= ref<{kind: string, selected: boolean}[]>(Object.keys(presentationInfo).map(kind => ({kind, selected: false})));
+type dataList = { kind: string; selected: boolean }
+const dataList = ref<{ kind: string, selected: boolean }[]>(Object.keys(presentationInfo).map(kind => ({
+  kind,
+  selected: false
+})));
 const postData = async () => {
   const selectedItems = dataList.value.filter(item => item.selected);
 
-
   const presentationRequest: PresentationRequest = {
-    id: crypto.randomUUID(),
-    input_descriptors: [
-      {
-        id: "eu.europa.ec.eudi.pid.1",
-        name: "EUDI PID",
-        purpose: "We need to verify your identity",
-        format: {
-          mso_mdoc: {
-            alg: [
-              "ES256", "ES384", "ES512", "EdDSA",
-              "ESB256", "ESB320", "ESB384", "ESB512"
-            ]
-          }
-        },
-        constraints: {
-          fields: selectedItems.map(item => ({
-            path: [`$['eu.europa.ec.eudi.pid.1']['${presentationInfo[item.kind]}']`],
-            intent_to_retain: false
-          }))
-        }
-      }
-    ],
     nonce: crypto.randomUUID(),
-    response_mode: 'direct_post'
+    response_mode: 'direct_post',
+    type: 'vp_token',
+    presentation_definition: {
+      id: crypto.randomUUID(),
+      input_descriptors: [
+        {
+          id: "eu.europa.ec.eudi.pid.1",
+          name: "EUDI PID",
+          purpose: "We need to verify your identity",
+          format: {
+            mso_mdoc: {
+              alg: [
+                "ES256", "ES384", "ES512", "EdDSA",
+                "ESB256", "ESB320", "ESB384", "ESB512"
+              ]
+            }
+          },
+          constraints: {
+            fields: selectedItems.map(item => ({
+              path: [`$['eu.europa.ec.eudi.pid.1']['${presentationInfo[item.kind]}']`],
+              intent_to_retain: false
+            }))
+          }
+        }
+      ],
+    },
+
   };
 
   try {
     const response = await axios.post(`${baseUrl}/ui/presentations`, presentationRequest);
+    const _presentationResponse: PresentationResponse = response.data;
   } catch (error) {
     console.error('Error posting data:', error);
   }
