@@ -33,10 +33,11 @@ import {presentationInfo} from '~/models/PresentationInfo';
 import type {PresentationResponse} from "~/models/PresentationResponse";
 
 const emit = defineEmits(['data-posted']);
+const sessionStore = useSessionStore();
 
 const runtimeConfig = useRuntimeConfig()
 const baseUrl = runtimeConfig.public.apiUrl
-type dataList = { kind: string; selected: boolean }
+
 const dataList = ref<{ kind: string, selected: boolean }[]>(Object.keys(presentationInfo).map(kind => ({
   kind,
   selected: false
@@ -79,7 +80,10 @@ const postData = async () => {
     const response = await axios.post(`${baseUrl}/ui/presentations`, presentationRequest);
     const presentationResponse: PresentationResponse = response.data;
 
+    sessionStore.setPresentationResponse(presentationResponse);
     emit('data-posted', presentationResponse);
+
+  emit('data-posted', presentationResponse);
   } catch (error) {
     console.error('Error posting data:', error);
   }

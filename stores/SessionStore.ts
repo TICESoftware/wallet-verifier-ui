@@ -1,24 +1,18 @@
 import { defineStore } from 'pinia'
+import type {PresentationResponse} from "~/models/PresentationResponse";
 
-const runtimeConfig = useRuntimeConfig()
 
-export const useSessionStore = defineStore('session', () => {
-    const baseUrl = runtimeConfig.public.apiUrl
-
-    async function _create(): Promise<void> {
-        try {
-            // TODO ...
-            await fetch(`${baseUrl}/...`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({})
-            });
-            return
-        } catch (error) {
-            console.error(error)
-            return
+export const useSessionStore = defineStore('session', {
+    state: () => ({
+        clientId: null as string | null,
+        presentationId: null as string | null,
+        requestUri: null as string | null,
+    }),
+    actions: {
+        setPresentationResponse(response: PresentationResponse) {
+            this.clientId = response.client_id
+            this.presentationId = response.presentation_id
+            this.requestUri = response.request_uri
         }
     }
 })
