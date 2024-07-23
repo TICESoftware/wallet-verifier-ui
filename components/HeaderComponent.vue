@@ -9,7 +9,7 @@
       <div class="rounded-lg pl-2 lg:pl-4 pr-2 py-2">
         <div class="flex flex-row">
           <div class="absolute left-1/2">
-            <img src="public/img/logo-mit-text.png" alt=""/>
+            <img src="public/img/logo-mit-text.png" alt="">
           </div>
           <div class="hidden lg:block">
             <NavLinks :links="links"/>

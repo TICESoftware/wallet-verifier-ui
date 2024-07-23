@@ -1,6 +1,6 @@
 <template>
   <div>
-    <PresentationForm v-if="!qrCodeData"  @dataPosted="handleDataPosted"/>
+    <PresentationForm v-if="!qrCodeData"  @data-posted="handleDataPosted"/>
     <QrCode v-if="qrCodeData" :data="qrCodeData"/>
   </div>
 </template>
