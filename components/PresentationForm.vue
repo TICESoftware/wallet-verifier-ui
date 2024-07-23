@@ -32,6 +32,7 @@ import type {PresentationRequest} from "~/models/PresentationRequest.ts";
 import {presentationInfo} from '~/models/PresentationInfo';
 import type {PresentationResponse} from "~/models/PresentationResponse";
 
+const emit = defineEmits(['dataPosted']);
 
 const runtimeConfig = useRuntimeConfig()
 const baseUrl = runtimeConfig.public.apiUrl
@@ -76,7 +77,9 @@ const postData = async () => {
 
   try {
     const response = await axios.post(`${baseUrl}/ui/presentations`, presentationRequest);
-    const _presentationResponse: PresentationResponse = response.data;
+    const presentationResponse: PresentationResponse = response.data;
+
+    emit('dataPosted', presentationResponse);
   } catch (error) {
     console.error('Error posting data:', error);
   }
