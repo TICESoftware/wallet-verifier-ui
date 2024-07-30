@@ -1,4 +1,7 @@
 <template>
+  <div>
+    <img src="public/img/logo-mit-text.png" alt="">
+  </div>
   <div class="text-xl lg:text-3xl font-bold text-accent m-6">
     <h1>Privacy by Design</h1>
   </div>

@@ -5,19 +5,15 @@
       'transform-gpu transition-transform duration-500 sticky top-0 z-50',
     ]"
   >
-    <div class="flex items-center justify-end max-w-7xl">
-      <div class="rounded-lg pl-2 lg:pl-4 pr-2 py-2">
-        <div class="flex flex-row">
-          <div class="absolute left-1/2">
-            <img src="public/img/logo-mit-text.png" alt="">
-          </div>
-          <div class="hidden lg:block">
-            <NavLinks :links="links"/>
-          </div>
-          <div class="lg:hidden">
-            <NavLinksMobile :links="links"/>
-          </div>
-        </div>
+    <div class="flex items-center justify-between max-w-7xl mx-auto pl-10 pr-2 py-3">
+      <div class="flex-1 flex justify-center relative text-xl text-base-100 lg:pl-48 lg:text-3xl">
+        EUDI Wallet
+      </div>
+      <div class="hidden lg:block">
+        <NavLinks :links="links"/>
+      </div>
+      <div class="lg:hidden">
+        <NavLinksMobile :links="links"/>
       </div>
     </div>
   </div>
