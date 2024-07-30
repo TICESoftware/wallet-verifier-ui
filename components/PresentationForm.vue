@@ -23,20 +23,27 @@
         Hier ausweisen
       </button>
     </div>
+    <div v-if="errorMessage" class="mx-6 my-4 p-4 border-red-400 border rounded text-red-500">
+      <p>{{ errorMessage }}</p>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import axios from 'axios';
-import type {PresentationRequest} from "~/models/PresentationRequest.ts";
+import type {TransactionRequest} from "~/models/TransactionRequest.ts";
 import {presentationInfo} from '~/models/PresentationInfo';
-import type {PresentationResponse} from "~/models/PresentationResponse";
+import type {TransactionResponse} from "~/models/TransactionResponse";
+import {ref} from "vue";
+
+const errorMessage = ref<string | null>(null);
 
 const emit = defineEmits(['data-posted']);
 const sessionStore = useSessionStore();
 
 const runtimeConfig = useRuntimeConfig()
 const baseUrl = runtimeConfig.public.apiUrl
+const nonce = crypto.randomUUID()
 
 const dataList = ref<{ kind: string, selected: boolean }[]>(Object.keys(presentationInfo).map(kind => ({
   kind,
@@ -45,8 +52,8 @@ const dataList = ref<{ kind: string, selected: boolean }[]>(Object.keys(presenta
 const postData = async () => {
   const selectedItems = dataList.value.filter(item => item.selected);
 
-  const presentationRequest: PresentationRequest = {
-    nonce: crypto.randomUUID(),
+  const presentationRequest: TransactionRequest = {
+    nonce: nonce,
     response_mode: 'direct_post',
     type: 'vp_token',
     presentation_definition: {
@@ -78,14 +85,15 @@ const postData = async () => {
 
   try {
     const response = await axios.post(`${baseUrl}/ui/presentations`, presentationRequest);
-    const presentationResponse: PresentationResponse = response.data;
+    const {client_id, presentation_id, request_uri}: TransactionResponse = response.data;
 
-    sessionStore.setPresentationResponse(presentationResponse);
-    emit('data-posted', presentationResponse);
+    sessionStore.setPresentationStore({client_id, presentation_id, request_uri, nonce});
+    emit('data-posted', {client_id, request_uri});
+    console.log('client_id: ', client_id);
 
-  emit('data-posted', presentationResponse);
   } catch (error) {
     console.error('Error posting data:', error);
+    errorMessage.value = 'Fehler beim Senden der Daten';
   }
 }
 </script>

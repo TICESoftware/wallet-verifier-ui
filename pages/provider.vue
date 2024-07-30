@@ -8,11 +8,10 @@
 <script setup lang="ts">
 import QrCode from "~/components/QrCode.vue";
 import PresentationForm from "~/components/PresentationForm.vue";
-import type {PresentationResponse} from "~/models/PresentationResponse";
 
-const qrCodeData = ref<PresentationResponse | null>(null);
+const qrCodeData = ref<{client_id: string, request_uri: string} | null>(null);
 
-const handleDataPosted = (data: PresentationResponse) => {
-  qrCodeData.value = data;
+const handleDataPosted = (client_id: string, request_uri: string) => {
+  qrCodeData.value = {client_id, request_uri};
 };
 </script>
