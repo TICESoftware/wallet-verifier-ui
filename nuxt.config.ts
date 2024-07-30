@@ -2,7 +2,7 @@
 
 export default defineNuxtConfig({
   ssr: false,
-  modules: ['@nuxt/eslint', '@pinia/nuxt', '@nuxtjs/tailwindcss'],
+  modules: ['@nuxt/eslint', '@pinia/nuxt', '@nuxtjs/tailwindcss', '@pinia-plugin-persistedstate/nuxt',],
   devtools: { enabled: true },
   runtimeConfig: {
     public: {
