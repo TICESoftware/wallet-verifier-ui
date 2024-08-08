@@ -1,6 +1,30 @@
 <template>
   <div class="text-xl lg:text-3xl font-bold text-accent m-6 text-center">
-    <h1>Ihre Daten</h1>
+    <h1>Ausweisen</h1>
+  </div>
+  <div class="text-center border border-gray-400 rounded m-6 p-2">
+    <p class="m-2">Wählen Sie zuerst die Art der Übertragung:</p>
+    <div class="flex flex-row w-full text-sm items-center justify-center">
+      <div class="form-control flex-1 mx-1 lg:px-8">
+        <label class="label cursor-pointer">
+          <span class="label-text mr-1">mDoc</span>
+          <input v-model="formType" type="radio" name="formType" value="mDoc" class="radio checked:bg-blue-500">
+        </label>
+      </div>
+      <div class="form-control flex-1 mx-1">
+        <label class="label cursor-pointer">
+          <span class="label-text mr-1">SDJWT</span>
+          <input v-model="formType" type="radio" name="formType" value="SDJWT" class="radio checked:bg-blue-500">
+        </label>
+      </div>
+      <label class="flex items-center flex-1 mx-2">
+        <input v-model="isZkpSelected" type="checkbox" class="mr-2">
+        <span class="cursor-pointer">ZKP</span>
+      </label>
+    </div>
+  </div>
+  <div class="text-xl lg:text-xl font-bold text-accent m-6 text-center">
+    <h2>Ihre Daten</h2>
   </div>
   <div class="text-base text-black m-6 text-center">
     <p>Wählen Sie hier die Daten, welche Sie übermitteln möchten.</p>
@@ -31,12 +55,14 @@
 
 <script setup lang="ts">
 import axios from 'axios';
-import type {TransactionRequest} from "~/models/TransactionRequest.ts";
-import {presentationInfo} from '~/models/PresentationInfo';
+import type {Format, TransactionRequest, ZkpFormat} from "~/models/TransactionRequest.ts";
+import {MDocClaims} from '~/models/MDocClaims';
 import type {TransactionResponse} from "~/models/TransactionResponse";
-import {ref} from "vue";
+import {SdJwtClaims} from "~/models/SdJwtClaims";
 
 const errorMessage = ref<string | null>(null);
+const formType = ref<string>('mDoc');
+const isZkpSelected = ref<boolean>(false);
 
 const emit = defineEmits(['data-posted']);
 const sessionStore = useSessionStore();
@@ -45,12 +71,49 @@ const runtimeConfig = useRuntimeConfig()
 const baseUrl = runtimeConfig.public.apiUrl
 const nonce = crypto.randomUUID()
 
-const dataList = ref<{ kind: string, selected: boolean }[]>(Object.keys(presentationInfo).map(kind => ({
-  kind,
-  selected: false
-})));
+const dataList = computed(() => {
+  const claims = formType.value === 'mDoc' ? MDocClaims : SdJwtClaims;
+  return Object.keys(claims).map(kind => ({
+    kind,
+    selected: false
+  }));
+});
+
 const postData = async () => {
   const selectedItems = dataList.value.filter(item => item.selected);
+
+  const alg: string[] = [
+    "ES256", "ES384", "ES512", "EdDSA",
+    "ESB256", "ESB320", "ESB384", "ESB512"
+  ]
+
+  const format: Format = formType.value === 'mDoc' ? {
+    mso_mdoc: {
+      alg
+    }
+  } : {
+    vc_sd_jwt: {
+      alg
+    }
+  };
+
+  const zkpformat: ZkpFormat = formType.value === 'mDoc' ? {
+    "mso_mdoc+zkp": {
+      "proof_type": ["secp256r1-sha256"]
+    }
+  } : {
+    "vc+sd-jwt+zkp": {
+      "proof_type": ["secp256r1-sha256"]
+    }
+  }
+
+  function pathLayout(kind: string) {
+    if (formType.value === 'mDoc') {
+      return [`$['eu.europa.ec.eudi.pid.1']['${MDocClaims[kind]}']`]
+    } else {
+      return [`$.${SdJwtClaims[kind]}`]
+    }
+  }
 
   const presentationRequest: TransactionRequest = {
     nonce: nonce,
@@ -63,24 +126,16 @@ const postData = async () => {
           id: "eu.europa.ec.eudi.pid.1",
           name: "EUDI PID",
           purpose: "We need to verify your identity",
-          format: {
-            mso_mdoc: {
-              alg: [
-                "ES256", "ES384", "ES512", "EdDSA",
-                "ESB256", "ESB320", "ESB384", "ESB512"
-              ]
-            }
-          },
+          format: isZkpSelected.value ? zkpformat : format,
           constraints: {
             fields: selectedItems.map(item => ({
-              path: [`$['eu.europa.ec.eudi.pid.1']['${presentationInfo[item.kind]}']`],
+              path: pathLayout(item.kind),
               intent_to_retain: false
             }))
           }
         }
       ],
     },
-
   };
 
   try {
@@ -88,8 +143,7 @@ const postData = async () => {
     const {client_id, presentation_id, request_uri}: TransactionResponse = response.data;
 
     sessionStore.setPresentationStore({client_id, presentation_id, request_uri, nonce});
-    emit('data-posted', {client_id, request_uri});
-    console.log('client_id: ', client_id);
+    emit('data-posted', { client_id, request_uri });
 
   } catch (error) {
     console.error('Error posting data:', error);
