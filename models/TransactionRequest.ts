@@ -14,16 +14,29 @@ type InputDescriptor = {
     id: string;
     name: string;
     purpose: string;
-    format: Format;
+    format: Format | ZkpFormat;
     constraints: Constraint;
 }
 
-type Format = {
+export type Format = {
     mso_mdoc: {
         alg: string[];
-    };
+    }
+} | {
+    vc_sd_jwt: {
+        alg: string[];
+    }
 }
 
+export type ZkpFormat = {
+    "vc+sd-jwt+zkp": {
+        proof_type: string[];
+    }
+} | {
+    "mso_mdoc+zkp": {
+        proof_type: string[];
+    }
+}
 type Constraint = {
     fields: Field[];
 }

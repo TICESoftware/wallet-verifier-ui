@@ -1,5 +1,5 @@
 <template>
-  <div v-if="props.data" class="flex flex-col justify-center items-center gap-6">
+  <div v-if="props.qrCodeData" class="flex flex-col justify-center items-center gap-6">
     <qrcode-vue :value="link" :level="level" :render-as="renderAs" :size="200" class="my-10"/>
     <NuxtLink :to="link">
       <button class="btn btn-primary">
@@ -17,10 +17,9 @@ const runtimeConfig = useRuntimeConfig()
 const baseUrl = runtimeConfig.public.apiUrl
 
 const props = defineProps<{
-  data: { client_id: string, request_uri: string }
+  qrCodeData: { client_id: string, request_uri: string }
 }>();
-const {client_id, request_uri} = props.data;
-
+const {client_id, request_uri} = props.qrCodeData;
 const authenticationUrl = `eudi-openid4vp://${baseUrl}?client_id=${client_id}&request_uri=${request_uri}`
 
 const link = ref(authenticationUrl)
