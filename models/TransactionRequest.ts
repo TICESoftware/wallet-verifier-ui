@@ -19,11 +19,11 @@ type InputDescriptor = {
 }
 
 export type Format = {
-    mso_mdoc: {
+    "mso_mdoc": {
         alg: string[];
     }
 } | {
-    vc_sd_jwt: {
+    "vc+sd-jwt": {
         alg: string[];
     }
 }
