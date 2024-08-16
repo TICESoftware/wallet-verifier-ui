@@ -2,6 +2,7 @@ export type TransactionRequest = {
     nonce: string;
     presentation_definition: PresentationDefinition;
     type: string;
+    wallet_response_redirect_uri_template: string;
     response_mode: string;
 }
 

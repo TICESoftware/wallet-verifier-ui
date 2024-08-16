@@ -8,6 +8,7 @@ export default defineNuxtConfig({
     public: {
       apiUrl: 'http://localhost:8080',
       version: 'dev',
+      uiUrl: 'https://staging.wallet.tice.software'
     },
   }
 })

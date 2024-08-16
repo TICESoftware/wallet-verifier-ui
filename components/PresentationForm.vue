@@ -69,6 +69,7 @@ const sessionStore = useSessionStore();
 
 const runtimeConfig = useRuntimeConfig()
 const baseUrl = runtimeConfig.public.apiUrl
+const redirectUrl = `${runtimeConfig.public.uiUrl}/wallet-redirect#response_code={RESPONSE_CODE}`
 const nonce = crypto.randomUUID()
 
 const dataList = computed(() => {
@@ -88,11 +89,11 @@ const postData = async () => {
   ]
 
   const format: Format = formType.value === 'mDoc' ? {
-    mso_mdoc: {
+    "mso_mdoc": {
       alg
     }
   } : {
-    vc_sd_jwt: {
+    "vc+sd-jwt": {
       alg
     }
   };
@@ -119,6 +120,7 @@ const postData = async () => {
     nonce: nonce,
     response_mode: 'direct_post',
     type: 'vp_token',
+    wallet_response_redirect_uri_template: redirectUrl,
     presentation_definition: {
       id: crypto.randomUUID(),
       input_descriptors: [
