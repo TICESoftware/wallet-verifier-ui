@@ -22,7 +22,13 @@
     "@headlessui/vue": "^1.7.22",
     "@heroicons/vue": "^2.1.5",
     "@pinia/nuxt": "^0.5.1",
+    "@sd-jwt/crypto-browser": "^0.7.2",
+    "@sd-jwt/crypto-nodejs": "^0.7.2",
+    "@sd-jwt/decode": "^0.7.2",
+    "@sd-jwt/types": "^0.7.2",
     "axios": "^1.7.2",
+    "buffer": "^6.0.3",
+    "cbor-web": "^9.0.2",
     "nuxt": "^3.12.2",
     "pinia": "^2.1.7",
     "qrcode.vue": "^3.4.1"

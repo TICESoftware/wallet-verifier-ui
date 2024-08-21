@@ -3,7 +3,7 @@
     <div class="lg:pt-10 bg-primary">
       <HeaderComponent/>
     </div>
-    <div class="flex-grow max-w-xl lg:max-w-7xl mx-auto">
+    <div class="flex-grow max-w-sm lg:max-w-7xl mx-auto">
       <div class="mx-6 my-4">
         <slot/>
       </div>
