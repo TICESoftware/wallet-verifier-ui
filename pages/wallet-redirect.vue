@@ -25,13 +25,13 @@
 import axios from "axios";
 import {onMounted, ref} from 'vue';
 import {getMdocClaims, getSdJwtClaims} from "~/utils/utils";
+import type {WalletResponse} from "~/models/WalletResponse";
 
 const runtimeConfig = useRuntimeConfig()
 const baseUrl = runtimeConfig.public.apiUrl
 const dataList = ref<{ key: string; value: string }[]>([]);
 const errorMessage = ref<string | null>(null);
 
-let vpToken: string;
 onMounted(async () => {
   const sessionStore = useSessionStore();
   const presentationId = sessionStore.presentationId
@@ -47,7 +47,6 @@ onMounted(async () => {
   //   errorMessage.value = 'Nonce ist falsch';
   //   return;
   // }
-  console.log('presentationId', presentationId, 'hash', hash);
   if (hash && presentationId) {
     try {
       const params = new URLSearchParams(hash.slice(1))
@@ -56,10 +55,11 @@ onMounted(async () => {
       const response = await axios.get(
           `${baseUrl}/ui/presentations/${presentationId}?response_code=${responseCode.value}`
       );
-      vpToken = response.data.vp_token;
+      const walletResponse: WalletResponse = response.data
+      const vpToken = walletResponse.vp_token;
+      const format = walletResponse.presentation_submission.descriptor_map[0].format
 
-      // TODO: add proper check
-      if (vpToken.includes('ey')) {
+      if (['vc+sd-jwt', 'vc+sd-jwt+zkp'].includes(format)) {
         const sdJwtClaims = await getSdJwtClaims(vpToken)
         console.log('These are the claims', sdJwtClaims)
         if (sdJwtClaims) {
@@ -74,7 +74,8 @@ onMounted(async () => {
         } else {
           errorMessage.value = 'Fehler beim Abrufen der Daten';
         }
-      } else {
+      }
+      else if (['mso_mdoc', 'mso_mdoc+zkp'].includes(format)) {
         const mdocClaims = await getMdocClaims(vpToken)
         console.log('mdocClaims', mdocClaims)
         if (mdocClaims) {
@@ -89,7 +90,7 @@ onMounted(async () => {
         }
       }
     } catch (error) {
-      console.log('Error wallet redirect', error)
+      console.error('Error wallet redirect', error)
       errorMessage.value = 'Fehler beim Abrufen der Daten';
     }
   } else {

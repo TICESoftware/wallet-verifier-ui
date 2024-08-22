@@ -1,8 +1,6 @@
 import type {ClaimSignature} from "~/models/MDocClaims";
 
 export const SdJwtClaims: ClaimSignature = {
-    'VCT': 'vct',
-    'Aussteller': 'iss',
     'Name': 'given_name',
     'Familienname': 'family_name',
     'Geburtsname': 'birth_family_name',

@@ -13,7 +13,7 @@ export async function getSdJwtClaims(vpToken: string): Promise<{  key: string; v
             digest,
         )
     } catch (error) {
-        console.log('Error during getSdJwtClaims', error);
+        console.error('Error during getSdJwtClaims', error);
         throw Error()
     }
 }
@@ -24,13 +24,14 @@ export async function getMdocClaims(vpToken: string): Promise<{
     try {
 
         const buf: Buffer = Buffer.from(vpToken, 'base64');
-        const valueOut: any = await cbor.decodeFirst(buf, {
+
+        const valueOut = await cbor.decodeFirst(buf, {
             preferWeb: true
 
         });
         // TODO: edit for multiple Presentations
-        let namespaces = valueOut.nameSpaces;
-        let firstNamespace = Object.entries(namespaces)[0][0];
+        const namespaces = valueOut.nameSpaces;
+        const firstNamespace = Object.entries(namespaces)[0][0];
         const dataArray: TagValue[] = namespaces[firstNamespace];
 
         const requestDataPromises = dataArray.map((item: TagValue) => cborDecode(item.value));
@@ -44,12 +45,12 @@ export async function getMdocClaims(vpToken: string): Promise<{
             Object.entries(claims)) as { [key: string]: { key: string; value: string } };
 
     } catch (error) {
-        console.log('Error during getmdocclaims', error);
+        console.error('Error during getMdocClaims', error);
         throw Error()
     }
 }
 
-async function cborDecode(buf: Uint8Array): Promise<any> {
+async function cborDecode(buf: Uint8Array) {
     return cbor.decodeFirst(buf, {
         preferWeb: true
     });
