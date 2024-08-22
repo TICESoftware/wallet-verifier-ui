@@ -47,7 +47,7 @@ onMounted(async () => {
   //   errorMessage.value = 'Nonce ist falsch';
   //   return;
   // }
-
+  console.log('presentationId', presentationId, 'hash', hash);
   if (hash && presentationId) {
     try {
       const params = new URLSearchParams(hash.slice(1))
@@ -58,9 +58,12 @@ onMounted(async () => {
       );
       vpToken = response.data.vp_token;
 
+      // TODO: add proper check
       if (vpToken.includes('ey')) {
         const sdJwtClaims = await getSdJwtClaims(vpToken)
+        console.log('These are the claims', sdJwtClaims)
         if (sdJwtClaims) {
+          console.log('sdJwtClaims', sdJwtClaims)
           dataList.value = Object.entries(sdJwtClaims)
               .filter(([key]) => !['cnf', 'exp', 'iat', 'iss', 'vct'].includes(key))
               .map(([key, value]) => ({
@@ -73,7 +76,9 @@ onMounted(async () => {
         }
       } else {
         const mdocClaims = await getMdocClaims(vpToken)
+        console.log('mdocClaims', mdocClaims)
         if (mdocClaims) {
+          console.log('mdocClaims', mdocClaims)
           dataList.value = Object.entries(mdocClaims).map(([, valueObj]) => ({
             key: valueObj.key,
             value: valueObj.value
@@ -83,7 +88,8 @@ onMounted(async () => {
           errorMessage.value = 'Fehler beim Abrufen der Daten';
         }
       }
-    } catch {
+    } catch (error) {
+      console.log('Error wallet redirect', error)
       errorMessage.value = 'Fehler beim Abrufen der Daten';
     }
   } else {

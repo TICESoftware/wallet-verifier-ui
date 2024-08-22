@@ -12,7 +12,8 @@ export async function getSdJwtClaims(vpToken: string): Promise<{  key: string; v
             decodedSdJwt.disclosures,
             digest,
         )
-    } catch {
+    } catch (error) {
+        console.log('Error during getSdJwtClaims', error);
         throw Error()
     }
 }
@@ -42,7 +43,8 @@ export async function getMdocClaims(vpToken: string): Promise<{
         return Object.fromEntries(
             Object.entries(claims)) as { [key: string]: { key: string; value: string } };
 
-    } catch {
+    } catch (error) {
+        console.log('Error during getmdocclaims', error);
         throw Error()
     }
 }
