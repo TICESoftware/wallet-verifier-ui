@@ -29,8 +29,9 @@ export async function getMdocClaims(vpToken: string): Promise<{
             preferWeb: true
 
         });
+        console.log('valueOut', valueOut)
         // TODO: edit for multiple Presentations
-        const namespaces = valueOut.nameSpaces;
+        const namespaces = valueOut.documents[0].issuerSigned.nameSpaces;
         const firstNamespace = Object.entries(namespaces)[0][0];
         const dataArray: TagValue[] = namespaces[firstNamespace];
 
