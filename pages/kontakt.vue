@@ -4,9 +4,7 @@
     <p>
       Alexandrinenstraße 4
       <br>
-      10969
-      <br>
-      Berlin
+      10969 Berlin
     </p>
     <br>
     <h2 class="text-accent text-xl font-semibold p-2">Kontakt</h2>

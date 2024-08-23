@@ -3,14 +3,12 @@
     <img src="public/img/logo-mit-text.png" alt="">
   </div>
   <div class="text-xl lg:text-3xl font-bold text-accent m-6">
-    <h1>Privacy by Design</h1>
+    <h1>Demo-Verifier</h1>
   </div>
-  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
-    magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-    consequat.</p>
+  <p>Diese Seite stellt einen Demo-Verifier für die EUDI Wallet bereit. Mit Hilfe dieser Seite kann eine Identifizierung aus der EUDI Wallet heraus demonstriert werden.</p>
   <div class="my-12">
     <NuxtLink to="/provider">
-      <button class="btn btn-primary">Jetzt testen</button>
+      <button class="btn btn-primary">Jetzt Demo ausprobieren</button>
     </NuxtLink>
   </div>
 </template>

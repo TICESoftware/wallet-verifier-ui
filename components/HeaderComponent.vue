@@ -27,7 +27,7 @@ import type {NavLinks} from "~/models/NavLinks";
 const links: NavLinks[] =
     [
       {name: "Home", to: "/"},
-      {name: "Test", to: "/provider"},
+      {name: "Demo", to: "/provider"},
       {name: "Kontakt", to: "/kontakt"},
     ]
 
