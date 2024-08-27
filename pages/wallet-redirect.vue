@@ -40,13 +40,6 @@ onMounted(async () => {
   const responseCode = ref()
   const hash = route.hash
 
-
-  // TODO: add check for nonce
-  // const nonce = route.query.nonce
-  // if (nonce !== vpToken.nonce) {
-  //   errorMessage.value = 'Nonce ist falsch';
-  //   return;
-  // }
   if (hash && presentationId) {
     try {
       const params = new URLSearchParams(hash.slice(1))

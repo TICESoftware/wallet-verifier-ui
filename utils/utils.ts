@@ -5,6 +5,8 @@ import * as cbor from 'cbor-web';
 import {Buffer} from 'buffer';
 
 export async function getSdJwtClaims(vpToken: string): Promise<{  key: string; value: string }[] | undefined> {
+    // TODO: edit for multiple Presentations + check nonce
+
     try {
         const decodedSdJwt: DecodedSDJwt = await decodeSdJwt(vpToken, digest);
         return await getClaims(
@@ -19,6 +21,8 @@ export async function getSdJwtClaims(vpToken: string): Promise<{  key: string; v
 }
 
 export async function getMdocClaims(vpToken: string): Promise<{
+    // TODO: edit for multiple Presentations + check nonce
+
     [p: string]: { key: string; value: string }
 } | undefined> {
     try {
@@ -29,7 +33,6 @@ export async function getMdocClaims(vpToken: string): Promise<{
             preferWeb: true
 
         });
-        // TODO: edit for multiple Presentations
         const namespaces = valueOut.documents[0].issuerSigned.nameSpaces;
         const firstNamespace = Object.entries(namespaces)[0][0];
         const dataArray: TagValue[] = namespaces[firstNamespace];

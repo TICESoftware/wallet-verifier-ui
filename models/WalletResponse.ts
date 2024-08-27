@@ -1,8 +1,7 @@
 export type WalletResponse = {
     state: string;
-    vp_token: string; // TODO: add string[]
+    vp_token: string;
     presentation_submission: PresentationSubmission;
-    nonce: string;
 }
 
 type PresentationSubmission = {
