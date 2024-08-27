@@ -61,9 +61,7 @@ onMounted(async () => {
 
       if (['vc+sd-jwt', 'vc+sd-jwt+zkp'].includes(format)) {
         const sdJwtClaims = await getSdJwtClaims(vpToken)
-        console.log('These are the claims', sdJwtClaims)
         if (sdJwtClaims) {
-          console.log('sdJwtClaims', sdJwtClaims)
           dataList.value = Object.entries(sdJwtClaims)
                 .filter(([key, value]) =>
                     !['cnf', 'exp', 'iat', 'iss', 'vct'].includes(key) &&
@@ -79,9 +77,7 @@ onMounted(async () => {
       }
       else if (['mso_mdoc', 'mso_mdoc+zkp'].includes(format)) {
         const mdocClaims = await getMdocClaims(vpToken)
-        console.log('mdocClaims', mdocClaims)
         if (mdocClaims) {
-          console.log('mdocClaims', mdocClaims)
           dataList.value = Object.entries(mdocClaims).map(([, valueObj]) => ({
             key: valueObj.key,
             value: valueObj.value
