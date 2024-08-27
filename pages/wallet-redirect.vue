@@ -35,6 +35,7 @@ const errorMessage = ref<string | null>(null);
 onMounted(async () => {
   const sessionStore = useSessionStore();
   const presentationId = sessionStore.presentationId
+  const nonce = sessionStore.nonce
 
   const route = useRoute()
   const responseCode = ref()
@@ -52,21 +53,21 @@ onMounted(async () => {
       const vpToken = walletResponse.vp_token;
       const format = walletResponse.presentation_submission.descriptor_map[0].format
 
-      if (['vc+sd-jwt', 'vc+sd-jwt+zkp'].includes(format)) {
-        const sdJwtClaims = await getSdJwtClaims(vpToken)
-        if (sdJwtClaims) {
-          dataList.value = Object.entries(sdJwtClaims)
+        if (['vc+sd-jwt', 'vc+sd-jwt+zkp'].includes(format)) {
+          const sdJwtClaims = await getSdJwtClaims(vpToken, nonce)
+          if (sdJwtClaims) {
+            dataList.value = Object.entries(sdJwtClaims)
                 .filter(([key, value]) =>
                     !['cnf', 'exp', 'iat', 'iss', 'vct'].includes(key) &&
                     !(typeof value === 'object' && Object.keys(value).length === 0))
-              .map(([key, value]) => ({
-                key: key.replaceAll('_', ' '),
-                value: typeof value === 'object' ? JSON.stringify(value) : String(value)
-              }));
-          sessionStore.$reset();
-        } else {
-          errorMessage.value = 'Fehler beim Abrufen der Daten';
-        }
+                .map(([key, value]) => ({
+                  key: key.replaceAll('_', ' '),
+                  value: typeof value === 'object' ? JSON.stringify(value) : String(value)
+                }));
+            sessionStore.$reset();
+          } else {
+            errorMessage.value = 'Fehler beim Abrufen der Daten';
+          }
       }
       else if (['mso_mdoc', 'mso_mdoc+zkp'].includes(format)) {
         const mdocClaims = await getMdocClaims(vpToken)
@@ -78,12 +79,12 @@ onMounted(async () => {
           sessionStore.$reset();
         } else {
           errorMessage.value = 'Fehler beim Abrufen der Daten';
-        }
+          }
       }
     } catch (error) {
-      console.error('Error wallet redirect', error)
       errorMessage.value = 'Fehler beim Abrufen der Daten';
     }
+
   } else {
     errorMessage.value = 'Fehler beim Abrufen der Daten';
   }

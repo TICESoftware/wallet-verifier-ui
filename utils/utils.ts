@@ -4,16 +4,20 @@ import type {TagValue} from "~/models/TagValue";
 import * as cbor from 'cbor-web';
 import {Buffer} from 'buffer';
 
-export async function getSdJwtClaims(vpToken: string): Promise<{  key: string; value: string }[] | undefined> {
-    // TODO: edit for multiple Presentations + check nonce
-
+export async function getSdJwtClaims(vpToken: string, nonce: string | null): Promise<{  key: string; value: string }[] | undefined> {
+    // TODO: edit for multiple Presentations
     try {
         const decodedSdJwt: DecodedSDJwt = await decodeSdJwt(vpToken, digest);
+
+        if (decodedSdJwt.kbJwt?.payload.nonce === nonce) {
         return await getClaims(
             decodedSdJwt.jwt.payload,
             decodedSdJwt.disclosures,
             digest,
         )
+        } else {
+            console.log('Wrong nonce')
+        }
     } catch (error) {
         console.error('Error during getSdJwtClaims', error);
         throw Error()
@@ -25,6 +29,7 @@ export async function getMdocClaims(vpToken: string): Promise<{
 
     [p: string]: { key: string; value: string }
 } | undefined> {
+    // TODO: edit for multiple Presentations
     try {
 
         const buf: Buffer = Buffer.from(vpToken, 'base64');
