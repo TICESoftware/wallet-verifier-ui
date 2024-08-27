@@ -65,7 +65,9 @@ onMounted(async () => {
         if (sdJwtClaims) {
           console.log('sdJwtClaims', sdJwtClaims)
           dataList.value = Object.entries(sdJwtClaims)
-              .filter(([key]) => !['cnf', 'exp', 'iat', 'iss', 'vct'].includes(key))
+                .filter(([key, value]) =>
+                    !['cnf', 'exp', 'iat', 'iss', 'vct'].includes(key) &&
+                    !(typeof value === 'object' && Object.keys(value).length === 0))
               .map(([key, value]) => ({
                 key: key.replaceAll('_', ' '),
                 value: typeof value === 'object' ? JSON.stringify(value) : String(value)
