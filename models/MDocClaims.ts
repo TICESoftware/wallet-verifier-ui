@@ -4,7 +4,7 @@ export type ClaimSignature = {
 export const MDocClaims: ClaimSignature = {
     'Familienname': 'family_name',
     'Geburtsname': 'family_name_birth',
-    'Geburtsdatum': 'birthdate',
+    'Geburtsdatum': 'birth_date',
     'Alter in Geburtsjahren': 'age_birth_year',
     'Alter in Jahren': 'age_in_years',
     'Über 12': 'age_over_12',
