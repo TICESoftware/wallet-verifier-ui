@@ -14,13 +14,12 @@ import QrcodeVue from 'qrcode.vue'
 import type {Level, RenderAs} from 'qrcode.vue'
 
 const runtimeConfig = useRuntimeConfig()
-const baseUrl = runtimeConfig.public.apiUrl
 
 const props = defineProps<{
   qrCodeData: { client_id: string, request_uri: string }
 }>();
 const {client_id, request_uri} = props.qrCodeData;
-const authenticationUrl = `openid4vp://${baseUrl}?client_id=${client_id}&request_uri=${request_uri}`
+const authenticationUrl = `openid4vp://?client_id=${client_id}&request_uri=${request_uri}`
 
 const link = ref(authenticationUrl)
 const level = ref<Level>('M')
