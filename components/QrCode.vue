@@ -13,8 +13,6 @@
 import QrcodeVue from 'qrcode.vue'
 import type {Level, RenderAs} from 'qrcode.vue'
 
-const runtimeConfig = useRuntimeConfig()
-
 const props = defineProps<{
   qrCodeData: { client_id: string, request_uri: string }
 }>();

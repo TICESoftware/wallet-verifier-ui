@@ -1,6 +1,5 @@
 import { defineStore } from 'pinia'
-import type {TransactionStore} from "~/models/TransactionStore";
-
+import type {TransactionStore} from "~/stores/models/TransactionStore";
 
 export const useSessionStore = defineStore('session', {
     state: () => ({
