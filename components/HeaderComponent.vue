@@ -1,10 +1,5 @@
 <template>
-  <div
-      :class="[
-      showHeader ? 'translate-y-0' : '-translate-y-full',
-      'transform-gpu transition-transform duration-500 sticky top-0 z-50',
-    ]"
-  >
+  <div :class="[showHeader ? 'translate-y-0' : '-translate-y-full','transform-gpu transition-transform duration-500 sticky top-0 z-50',]">
     <div class="flex items-center justify-between max-w-7xl mx-auto pl-10 pr-2 py-3">
       <div class="flex-1 flex justify-center relative text-xl text-base-100 lg:pl-48 lg:text-3xl">
         EUDI Wallet

@@ -1,0 +1,1 @@
+export type ClaimEntry = { key: string; value: string };

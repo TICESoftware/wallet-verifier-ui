@@ -26,10 +26,11 @@ import axios from "axios";
 import {onMounted, ref} from 'vue';
 import {getMdocClaims, getSdJwtClaims} from "~/utils/utils";
 import type {WalletResponse} from "~/models/WalletResponse";
+import type {ClaimEntry} from "~/models/ClaimEntry";
 
 const runtimeConfig = useRuntimeConfig()
 const baseUrl = runtimeConfig.public.apiUrl
-const dataList = ref<{ key: string; value: string }[]>([]);
+const dataList = ref<ClaimEntry[]>([]);
 const errorMessage = ref<string | null>(null);
 
 onMounted(async () => {
@@ -50,19 +51,14 @@ onMounted(async () => {
       );
       const walletResponse: WalletResponse = response.data
       const vpToken = walletResponse.vp_token;
+
+      // Currently this supports only one incoming presentation. For multiple presentations the following part should be adjusted accordingly.
       const format = walletResponse.presentation_submission.descriptor_map[0].format
 
       if (['vc+sd-jwt', 'vc+sd-jwt+zkp'].includes(format)) {
         const sdJwtClaims = await getSdJwtClaims(vpToken)
         if (sdJwtClaims) {
-          dataList.value = Object.entries(sdJwtClaims)
-                .filter(([key, value]) =>
-                    !['cnf', 'exp', 'iat', 'iss', 'vct'].includes(key) &&
-                    !(typeof value === 'object' && Object.keys(value).length === 0))
-              .map(([key, value]) => ({
-                key: key.replaceAll('_', ' '),
-                value: typeof value === 'object' ? JSON.stringify(value) : String(value)
-              }));
+          dataList.value = sdJwtClaims
           sessionStore.$reset();
         } else {
           errorMessage.value = 'Fehler beim Abrufen der Daten';
@@ -71,10 +67,7 @@ onMounted(async () => {
       else if (['mso_mdoc', 'mso_mdoc+zkp'].includes(format)) {
         const mdocClaims = await getMdocClaims(vpToken)
         if (mdocClaims) {
-          dataList.value = Object.entries(mdocClaims).map(([, valueObj]) => ({
-            key: valueObj.key,
-            value: valueObj.value
-          }));
+          dataList.value = mdocClaims
           sessionStore.$reset();
         } else {
           errorMessage.value = 'Fehler beim Abrufen der Daten';
